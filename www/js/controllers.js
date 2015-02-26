@@ -19,7 +19,7 @@ app.controller('AppCtrl', function($scope, $cordovaPush, $cordovaDialogs, $cordo
 
         if (ionic.Platform.isAndroid()) {
             config = {
-                "senderID": "YOUR_GCM_PROJECT_ID" // REPLACE THIS WITH YOURS FROM GCM CONSOLE - also in the project URL like: https://console.developers.google.com/project/434205989073
+                "senderID": "CHANGE_THIS" // REPLACE THIS WITH YOURS FROM GCM CONSOLE - also in the project URL like: https://console.developers.google.com/project/434205989073
             };
         }
         else if (ionic.Platform.isIOS()) {
@@ -31,7 +31,7 @@ app.controller('AppCtrl', function($scope, $cordovaPush, $cordovaDialogs, $cordo
         }
 
         $cordovaPush.register(config).then(function (result) {
-            console.log("Register success " + result);
+            $cordovaToast.showShortCenter("Register success " + result);
 
             $cordovaToast.showShortCenter('Registered for push notifications');
             $scope.registerDisabled=true;
@@ -41,13 +41,13 @@ app.controller('AppCtrl', function($scope, $cordovaPush, $cordovaDialogs, $cordo
                 storeDeviceToken("ios");
             }
         }, function (err) {
-            console.log("Register error " + err)
+            $cordovaToast.showShortCenter("Register error " + err)
         });
     }
 
     // Notification Received
     $scope.$on('$cordovaPush:notificationReceived', function (event, notification) {
-        console.log(JSON.stringify([notification]));
+        $cordovaToast.showShortCenter(JSON.stringify([notification]));
         if (ionic.Platform.isAndroid()) {
             handleAndroid(notification);
         }
@@ -63,7 +63,7 @@ app.controller('AppCtrl', function($scope, $cordovaPush, $cordovaDialogs, $cordo
     function handleAndroid(notification) {
         // ** NOTE: ** You could add code for when app is in foreground or not, or coming from coldstart here too
         //             via the console fields as shown.
-        console.log("In foreground " + notification.foreground  + " Coldstart " + notification.coldstart);
+        $cordovaToast.showShortCenter("In foreground " + notification.foreground  + " Coldstart " + notification.coldstart);
         if (notification.event == "registered") {
             $scope.regId = notification.regid;
             storeDeviceToken("android");
@@ -98,9 +98,9 @@ app.controller('AppCtrl', function($scope, $cordovaPush, $cordovaDialogs, $cordo
 
             if (notification.badge) {
                 $cordovaPush.setBadgeNumber(notification.badge).then(function (result) {
-                    console.log("Set badge success " + result)
+                    $cordovaToast.showShortCenter("Set badge success " + result)
                 }, function (err) {
-                    console.log("Set badge error " + err)
+                    $cordovaToast.showShortCenter("Set badge error " + err)
                 });
             }
         }
@@ -121,14 +121,14 @@ app.controller('AppCtrl', function($scope, $cordovaPush, $cordovaDialogs, $cordo
     function storeDeviceToken(type) {
         // Create a random userid to store with it
         var user = { user: 'user' + Math.floor((Math.random() * 10000000) + 1), type: type, token: $scope.regId };
-        console.log("Post token for registered device with data " + JSON.stringify(user));
+        $cordovaToast.showShortCenter("Post token for registered device with data " + JSON.stringify(user));
 
-        $http.post('http://192.168.1.16:8000/subscribe', JSON.stringify(user))
+        $http.post('http://CHANGE_THIS:8000/subscribe', JSON.stringify(user))
             .success(function (data, status) {
-                console.log("Token stored, device is successfully subscribed to receive push notifications.");
+                $cordovaToast.showShortCenter("Token stored, device is successfully subscribed to receive push notifications.");
             })
             .error(function (data, status) {
-                console.log("Error storing device token." + data + " " + status)
+                $cordovaToast.showShortCenter("Error storing device token." + data + " " + status)
             }
         );
     }
@@ -139,12 +139,12 @@ app.controller('AppCtrl', function($scope, $cordovaPush, $cordovaDialogs, $cordo
     // previously so multiple userids will be created with the same token unless you add code to check).
     function removeDeviceToken() {
         var tkn = {"token": $scope.regId};
-        $http.post('http://192.168.1.16:8000/unsubscribe', JSON.stringify(tkn))
+        $http.post('http://CHANGE_THIS:8000/unsubscribe', JSON.stringify(tkn))
             .success(function (data, status) {
-                console.log("Token removed, device is successfully unsubscribed and will not receive push notifications.");
+                $cordovaToast.showShortCenter("Token removed, device is successfully unsubscribed and will not receive push notifications.");
             })
             .error(function (data, status) {
-                console.log("Error removing device token." + data + " " + status)
+                $cordovaToast.showShortCenter("Error removing device token." + data + " " + status)
             }
         );
     }
@@ -155,14 +155,14 @@ app.controller('AppCtrl', function($scope, $cordovaPush, $cordovaDialogs, $cordo
     //
     // ** Instead, just remove the device token from your db and stop sending notifications **
     $scope.unregister = function () {
-        console.log("Unregister called");
+        $cordovaToast.showShortCenter("Unregister called");
         removeDeviceToken();
         $scope.registerDisabled=false;
         //need to define options here, not sure what that needs to be but this is not recommended anyway
 //        $cordovaPush.unregister(options).then(function(result) {
-//            console.log("Unregister success " + result);//
+//            $cordovaToast.showShortCenter("Unregister success " + result);//
 //        }, function(err) {
-//            console.log("Unregister error " + err)
+//            $cordovaToast.showShortCenter("Unregister error " + err)
 //        });
     }
 

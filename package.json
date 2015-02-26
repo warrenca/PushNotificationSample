@@ -1,0 +1,9 @@
+{
+  "cordovaPlugins": [
+    "org.apache.cordova.console",
+    "org.apache.cordova.device",
+    "org.apache.cordova.dialogs",
+    "org.apache.cordova.file",
+    "org.apache.cordova.media"
+  ]
+}
