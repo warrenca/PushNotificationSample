@@ -123,7 +123,7 @@ app.controller('AppCtrl', function($scope, $cordovaPush, $cordovaDialogs, $cordo
         var user = { user: 'user' + Math.floor((Math.random() * 10000000) + 1), type: type, token: $scope.regId };
         $cordovaToast.showShortCenter("Post token for registered device with data " + JSON.stringify(user));
 
-        $http.post('http://CHANGE_THIS:8000/subscribe', JSON.stringify(user))
+        $http.post('http://CHANGE_THIS_IP:8000/subscribe', JSON.stringify(user))
             .success(function (data, status) {
                 $cordovaToast.showShortCenter("Token stored, device is successfully subscribed to receive push notifications.");
             })
@@ -139,7 +139,7 @@ app.controller('AppCtrl', function($scope, $cordovaPush, $cordovaDialogs, $cordo
     // previously so multiple userids will be created with the same token unless you add code to check).
     function removeDeviceToken() {
         var tkn = {"token": $scope.regId};
-        $http.post('http://CHANGE_THIS:8000/unsubscribe', JSON.stringify(tkn))
+        $http.post('http://CHANGE_THIS_IP:8000/unsubscribe', JSON.stringify(tkn))
             .success(function (data, status) {
                 $cordovaToast.showShortCenter("Token removed, device is successfully unsubscribed and will not receive push notifications.");
             })

@@ -1,0 +1,2 @@
+- Get the PROJECT ID in your console https://console.developers.google.com/project/PROJECT-ID/apiui/credential
+- Set the CHANGE_THIS_IP to the IP of your node-pushserver
